@@ -1,0 +1,256 @@
+
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Executive Summary — Sentimen Pelanggan</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14px; line-height: 1.75;
+    background: #ffffff; color: #1f2328;
+    padding: 40px 16px;
+  }
+  .page { max-width: 760px; margin: 0 auto; }
+
+  /* Header */
+  .doc-header { border-bottom: 2px solid #1f2328; padding-bottom: 16px; margin-bottom: 28px; }
+  .doc-label  { font-size: 10px; font-weight: 700; letter-spacing: .12em;
+                text-transform: uppercase; color: #57606a; margin-bottom: 6px; }
+  .doc-title  { font-size: 22px; font-weight: 700; line-height: 1.3; }
+  .doc-meta   { margin-top: 8px; font-size: 12px; color: #57606a; display: flex; gap: 20px; flex-wrap: wrap; }
+  .doc-meta span::before { content: "• "; }
+  .doc-meta span:first-child::before { content: ""; }
+
+  /* KPI strip */
+  .kpi-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+               background: #e5e7eb; border: 1px solid #e5e7eb; border-radius: 6px;
+               overflow: hidden; margin-bottom: 28px; }
+  .kpi { background: #fff; padding: 14px 16px; }
+  .kpi .k-label { font-size: 10px; text-transform: uppercase; letter-spacing: .07em;
+                  color: #57606a; font-weight: 600; margin-bottom: 4px; }
+  .kpi .k-value { font-size: 24px; font-weight: 700; }
+  .kpi .k-sub   { font-size: 11px; color: #57606a; margin-top: 1px; }
+  .c-pos { color: #1a7f37; } .c-neg { color: #cf222e; }
+  .c-neu { color: #3b82d4; } .c-def { color: #1f2328; }
+
+  /* Sentiment bar */
+  .sent-bar-wrap { margin-bottom: 28px; }
+  .sent-bar-title { font-size: 11px; font-weight: 700; text-transform: uppercase;
+                    letter-spacing: .07em; color: #57606a; margin-bottom: 8px; }
+  .sent-bar { display: flex; height: 28px; border-radius: 4px; overflow: hidden; }
+  .sb-pos { background: #1a7f37; display: flex; align-items: center;
+            justify-content: center; font-size: 11px; font-weight: 700; color: #fff; }
+  .sb-neu { background: #9ca3af; display: flex; align-items: center;
+            justify-content: center; font-size: 11px; font-weight: 700; color: #fff; }
+  .sb-neg { background: #cf222e; display: flex; align-items: center;
+            justify-content: center; font-size: 11px; font-weight: 700; color: #fff; }
+  .sent-legend { display: flex; gap: 16px; margin-top: 6px; }
+  .leg-item { font-size: 11px; color: #57606a; display: flex; align-items: center; gap: 5px; }
+  .leg-dot  { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* Sections */
+  .section { margin-bottom: 28px; }
+  .sec-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .sec-num  { width: 24px; height: 24px; border-radius: 50%; display: flex;
+              align-items: center; justify-content: center;
+              font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .num-blue { background: #3b82d4; }
+  .num-green{ background: #1a7f37; }
+  .num-red  { background: #cf222e; }
+  .sec-title { font-size: 13px; font-weight: 700; text-transform: uppercase;
+               letter-spacing: .05em; }
+
+  /* Cards grid */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .card  { border: 1px solid #e5e7eb; border-radius: 6px; padding: 14px 14px 12px;
+           background: #f7f8fa; }
+  .card.pos-card { border-top: 3px solid #1a7f37; }
+  .card.neg-card { border-top: 3px solid #cf222e; }
+  .card-rank  { font-size: 10px; font-weight: 700; letter-spacing: .08em;
+                text-transform: uppercase; color: #57606a; margin-bottom: 4px; }
+  .card-head  { font-size: 13px; font-weight: 700; margin-bottom: 6px; line-height: 1.35; }
+  .card-body  { font-size: 12px; color: #57606a; line-height: 1.55; }
+  .card-stat  { display: inline-block; margin-top: 8px; font-size: 11px;
+                font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+  .stat-pos   { background: #d1fae5; color: #065f46; }
+  .stat-neg   { background: #fee2e2; color: #991b1b; }
+
+  /* Executive Summary text */
+  .exec-box { background: #f7f8fa; border-left: 3px solid #3b82d4;
+              border-radius: 0 6px 6px 0; padding: 18px 22px; }
+  .exec-box p { margin-bottom: 14px; font-size: 13.5px; line-height: 1.8; }
+  .exec-box p:last-child { margin-bottom: 0; }
+  .hl-pos { background: #d1fae5; color: #065f46; font-weight: 600;
+            padding: 1px 5px; border-radius: 3px; }
+  .hl-neg { background: #fee2e2; color: #991b1b; font-weight: 600;
+            padding: 1px 5px; border-radius: 3px; }
+  .hl-neu { background: #dbeafe; color: #1e40af; font-weight: 600;
+            padding: 1px 5px; border-radius: 3px; }
+
+  /* Recommendation box */
+  .rec-box { border: 1px solid #e5e7eb; border-radius: 6px; padding: 14px 18px;
+             background: #fffbeb; border-left: 3px solid #d97706; margin-top: 16px; }
+  .rec-box .rec-title { font-size: 11px; font-weight: 700; text-transform: uppercase;
+                        letter-spacing: .07em; color: #92400e; margin-bottom: 8px; }
+  .rec-box ul { padding-left: 16px; }
+  .rec-box li { font-size: 12.5px; color: #78350f; margin-bottom: 4px; line-height: 1.55; }
+
+  footer { text-align: center; font-size: 11px; color: #57606a;
+           border-top: 1px solid #e5e7eb; margin-top: 40px; padding-top: 12px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  
+  <div class="doc-header">
+    <div class="doc-label">Confidential — For Internal Use</div>
+    <div class="doc-title">Executive Summary: Analisis Sentimen Ulasan Pelanggan</div>
+    <div class="doc-meta">
+      <span>Sumber Data: hasil_sentimen_pelanggan.csv</span>
+      <span>Total Sampel: 1.001 Ulasan</span>
+      <span>Merek Tercakup: 21</span>
+      <span>Disiapkan untuk: Tim Produk &amp; QC</span>
+    </div>
+  </div>
+
+  
+  <div class="kpi-strip">
+    <div class="kpi">
+      <div class="k-label">Avg. Rating</div>
+      <div class="k-value c-def">4.39<span style="font-size:13px;color:#57606a"> /5</span></div>
+      <div class="k-sub">Skala 1–5 bintang</div>
+    </div>
+    <div class="kpi">
+      <div class="k-label">Sentimen Positif</div>
+      <div class="k-value c-pos">90.9%</div>
+      <div class="k-sub">910 dari 1.001 ulasan</div>
+    </div>
+    <div class="kpi">
+      <div class="k-label">Sentimen Negatif</div>
+      <div class="k-value c-neg">5.3%</div>
+      <div class="k-sub">53 dari 1.001 ulasan</div>
+    </div>
+    <div class="kpi">
+      <div class="k-label">Rating Bintang 5</div>
+      <div class="k-value c-def">63.9%</div>
+      <div class="k-sub">640 pelanggan memberi ★★★★★</div>
+    </div>
+  </div>
+
+  
+  <div class="sent-bar-wrap">
+    <div class="sent-bar-title">Distribusi Sentimen Keseluruhan</div>
+    <div class="sent-bar">
+      <div class="sb-pos" style="width:90.9%">90.9%</div>
+      <div class="sb-neu" style="width:3.8%">3.8%</div>
+      <div class="sb-neg" style="width:5.3%">5.3%</div>
+    </div>
+    <div class="sent-legend">
+      <div class="leg-item"><div class="leg-dot" style="background:#1a7f37"></div>Positif — 910 ulasan (90.9%)</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#9ca3af"></div>Netral — 38 ulasan (3.8%)</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#cf222e"></div>Negatif — 53 ulasan (5.3%)</div>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-num num-blue">1</div>
+      <div class="sec-title">Executive Summary</div>
+    </div>
+    <div class="exec-box">
+      <p>
+        Berdasarkan analisis terhadap <strong>1.001 ulasan pelanggan</strong> yang mencakup 21 merek produk,
+        tingkat kepuasan pelanggan secara agregat berada pada level yang sangat tinggi.
+        Sebanyak <span class="hl-pos">910 ulasan (90,9%)</span> terklasifikasi sebagai positif,
+        dengan rata-rata rating <strong>4,39 dari 5,0</strong> dan 63,9% pelanggan memberikan rating
+        bintang penuh (5/5). Distribusi ini secara statistik mengindikasikan bahwa proposisi nilai
+        produk — khususnya pada dimensi harga, performa, dan pengalaman pembelian — telah berhasil
+        memenuhi ekspektasi mayoritas konsumen. Segmen netral sebesar <span class="hl-neu">3,8%</span>
+        mencerminkan kelompok pelanggan yang menilai produk cukup memuaskan namun belum menemukan faktor
+        pembeda yang kuat.
+      </p>
+      <p>
+        Meskipun demikian, terdapat <span class="hl-neg">53 ulasan negatif (5,3%)</span> yang perlu
+        mendapat perhatian serius dari tim QC dan produk. Konsentrasi keluhan terbesar berasal dari
+        merek <strong>realme</strong>, yang mencatat tingkat sentimen negatif sebesar <strong>19%</strong>
+        (27 dari 140 ulasan) — jauh melampaui rata-rata negatif keseluruhan. Tiga isu utama yang
+        mendominasi keluhan adalah kualitas build (38 penyebutan), performa kamera (29 penyebutan),
+        dan kelambatan sistem/lag (23 penyebutan). Penanganan terhadap tiga poin ini secara langsung
+        berpotensi menurunkan tingkat churn dan meningkatkan Net Promoter Score (NPS) secara material.
+      </p>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-num num-green">2</div>
+      <div class="sec-title">Kekuatan Produk — 3 USP Utama</div>
+    </div>
+    <div class="cards">
+      <div class="card pos-card">
+        <div class="card-rank">USP #1</div>
+        <div class="card-head">Value for Money yang Kompetitif</div>
+        <div class="card-body">Aspek harga-ke-nilai menjadi driver kepuasan terbesar. Pelanggan secara konsisten menyebutkan produk ini sebanding atau melebihi ekspektasi di kelasnya.</div>
+        <span class="card-stat stat-pos">587 penyebutan positif</span>
+      </div>
+      <div class="card pos-card">
+        <div class="card-rank">USP #2</div>
+        <div class="card-head">Performa &amp; Kecepatan Sistem</div>
+        <div class="card-body">Pelanggan mengapresiasi responsivitas sistem, kecepatan boot, dan kelancaran multitasking sebagai keunggulan yang paling terasa dalam penggunaan harian.</div>
+        <span class="card-stat stat-pos">374 penyebutan positif</span>
+      </div>
+      <div class="card pos-card">
+        <div class="card-rank">USP #3</div>
+        <div class="card-head">Pengalaman Pengiriman &amp; Kemasan</div>
+        <div class="card-body">Kecepatan pengiriman dan kondisi kemasan yang baik berkontribusi signifikan pada first impression pelanggan, memperkuat persepsi positif terhadap merek.</div>
+        <span class="card-stat stat-pos">352 penyebutan positif</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-num num-red">3</div>
+      <div class="sec-title">Poin Evaluasi QC — 3 Keluhan Utama</div>
+    </div>
+    <div class="cards">
+      <div class="card neg-card">
+        <div class="card-rank">Prioritas #1</div>
+        <div class="card-head">Kualitas Build &amp; Material</div>
+        <div class="card-body">Keluhan terbanyak menyangkut material yang terasa murah, konstruksi bodi yang tidak kokoh, dan build quality yang tidak konsisten antar unit. Isu ini berdampak langsung pada persepsi premium produk.</div>
+        <span class="card-stat stat-neg">38 keluhan negatif</span>
+      </div>
+      <div class="card neg-card">
+        <div class="card-rank">Prioritas #2</div>
+        <div class="card-head">Kualitas Kamera</div>
+        <div class="card-body">Output foto dan video dinilai tidak sebanding dengan spesifikasi yang diklaim. Keluhan terkonsentrasi pada kondisi low-light, detail yang kurang tajam, dan kamera depan yang buruk.</div>
+        <span class="card-stat stat-neg">29 keluhan negatif</span>
+      </div>
+      <div class="card neg-card">
+        <div class="card-rank">Prioritas #3</div>
+        <div class="card-head">Performa di Bawah Beban</div>
+        <div class="card-body">Sejumlah pelanggan melaporkan lag, hang, dan penurunan performa signifikan saat menjalankan aplikasi berat atau multitasking. Merek realme mencatat insiden tertinggi (19% ulasan negatif).</div>
+        <span class="card-stat stat-neg">23 keluhan negatif</span>
+      </div>
+    </div>
+
+    <div class="rec-box">
+      <div class="rec-title">Rekomendasi Tindak Lanjut untuk Tim Produk</div>
+      <ul>
+        <li><strong>Audit kualitas material build</strong> pada lini produk realme dan Vu — dua merek dengan rasio sentimen negatif tertinggi (19% dan 15%).</li>
+        <li><strong>Review pipeline pemrosesan gambar kamera</strong> melalui firmware update; prioritaskan peningkatan mode malam dan stabilisasi digital.</li>
+        <li><strong>Benchmark performa CPU/RAM</strong> pada skenario multitasking berat sebelum rilis berikutnya untuk memvalidasi klaim spesifikasi di material pemasaran.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+<footer>Made with IBM Bob</footer>
+</body>
+</html>
